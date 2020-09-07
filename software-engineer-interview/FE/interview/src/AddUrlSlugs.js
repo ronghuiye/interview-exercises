@@ -13,24 +13,44 @@ function AddUrlSlugs(props) {
 
   const [url, setUrl] = useState("")
   const [description, setDescription] = useState("")
+  const [error, setError] = useState({
+    url:'',
+    description:''
+  })
 
-  const handleUrlChange = (e) => {
-    setUrl(e.target.value)
-  }
+  const handleChange = (e) => {
+    e.preventDefault()
+    const {value,name} = e.target
+    let err = error
+    switch (name) {
+      case 'url':
+        setUrl(value)
+        err.url = /^(ftp|http|https):\/\/[^ "]+$/.test(value) ? '' : 'Must be a valid url'
+        break
+      case 'description':
+        setDescription(value)
+        err.description = value.length < 5 ? 'Must be at least 5 characters long' : ''
+        break
+      default:
+        break
+    }
 
-  const handleDescriptionChange = (e) => {
-    setDescription(e.target.value)
+    setError(err)
   }
 
   const handleOnClick = () => {
     props.submit(url, description)
   }
 
+  const isDisabled = () => {
+    return error.url || error.description || url.length === 0 || description.length === 0
+  }
+
   return (
     <React.Fragment>
-      <TextField id="url-text-field" label="Url" value={url} onChange={handleUrlChange}/>
-      <TextField id="description-text-field" label="Description" value={description} onChange={handleDescriptionChange}/>
-      <Button id="submit-button" className={classes.button} variant="outlined" onClick={handleOnClick}>submit</Button>
+      <TextField id="url-text-field" label="Url" name="url" value={url} helperText={error.url} onChange={handleChange}/>
+      <TextField id="description-text-field" label="Description" name="description" value={description} helperText={error.description} onChange={handleChange}/>
+      <Button id="submit-button" className={classes.button} variant="outlined" disabled={ isDisabled()} onClick={handleOnClick}>submit</Button>
     </React.Fragment>
   )
 

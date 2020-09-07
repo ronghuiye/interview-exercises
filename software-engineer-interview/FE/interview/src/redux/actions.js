@@ -7,6 +7,7 @@ export const submit = (url, description) => {
       console.log(response)
       if(response && response.success){
         console.log(response)
+        window.location=url
       }else{
         console.log('submit failed')
       }
