@@ -1,11 +1,11 @@
-package com.asurint.interview.entity;
+package com.asurint.slugs.entity;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
 @Entity
-public class Interview {
+public class Slugs {
 
 	@Id
 	@GeneratedValue

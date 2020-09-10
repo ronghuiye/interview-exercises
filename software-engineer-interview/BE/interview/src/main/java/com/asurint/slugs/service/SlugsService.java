@@ -1,40 +1,40 @@
-package com.asurint.interview.service;
+package com.asurint.slugs.service;
 
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.asurint.interview.entity.Interview;
-import com.asurint.interview.repo.InterviewRepo;
+import com.asurint.slugs.entity.Slugs;
+import com.asurint.slugs.repo.SlugsRepo;
 
 @Service
-public class InterviewService {
+public class SlugsService {
 	
 	@Autowired
-	InterviewRepo interviewRepo;
+	SlugsRepo repo;
 	
 	@Transactional
 	public String processAndPersist(String url, String description) {
-		
+		//check url exists if needed
 		String slugs = slugsGenerater(description);
-		Interview i = new Interview();
+		Slugs i = new Slugs();
 		i.setUrl(url);
 		i.setDescription(slugs);
-		interviewRepo.save(i);
+		repo.save(i);
 		
 		return slugs;
 	}
 	
 	public String getUrlBySlugs(String slugs) {
-		Interview i = interviewRepo.findOneByDescription(slugs);
+		Slugs i = repo.findOneByDescription(slugs);
 		if(i != null) {
 			return i.getUrl();
 		}
 		return "";
 	}
 
-	private String slugsGenerater(String str) {
+	public String slugsGenerater(String str) {
 		String filteredStr = str.replaceAll("-", " ")
 				.trim()
 				.toLowerCase()

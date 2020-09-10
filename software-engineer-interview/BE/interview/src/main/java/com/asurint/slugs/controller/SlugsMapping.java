@@ -1,4 +1,4 @@
-package com.asurint.interview.controller;
+package com.asurint.slugs.controller;
 
 public class SlugsMapping {
 

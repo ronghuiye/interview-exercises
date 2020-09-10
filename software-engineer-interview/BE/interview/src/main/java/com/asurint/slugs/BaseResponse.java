@@ -1,4 +1,4 @@
-package com.asurint.interview;
+package com.asurint.slugs;
 
 public class BaseResponse {
 

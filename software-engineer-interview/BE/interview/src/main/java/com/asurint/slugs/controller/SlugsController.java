@@ -1,4 +1,4 @@
-package com.asurint.interview.controller;
+package com.asurint.slugs.controller;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -9,20 +9,20 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.asurint.interview.BaseResponse;
-import com.asurint.interview.service.InterviewService;
+import com.asurint.slugs.BaseResponse;
+import com.asurint.slugs.service.SlugsService;
 
 @RestController
-public class InterviewController {
+public class SlugsController {
 
 	@Autowired
-	InterviewService interviewService;
+	SlugsService service;
 	
 	@PostMapping(path = "/api/step2")
 	public ResponseEntity<BaseResponse> addSlugsRecord(@RequestBody RequestMapping mapping){
 		BaseResponse response = new BaseResponse();
 		try {
-			String slugs = interviewService.processAndPersist(mapping.getUrl(), mapping.getDescription());
+			String slugs = service.processAndPersist(mapping.getUrl(), mapping.getDescription());
 			response.setStatus(200);
 			response.setSuccess(true);
 			response.setMessage(slugs);
@@ -37,9 +37,13 @@ public class InterviewController {
 	
 	@PostMapping(path = "/api/step3")
 	public void addSlugsRecord2(HttpServletResponse httpServletResponse, @RequestBody SlugsMapping mapping){
-		String url = interviewService.getUrlBySlugs(mapping.getSlugs());
-		httpServletResponse.setHeader("Location", url);
-	    httpServletResponse.setStatus(302);
+		String url = service.getUrlBySlugs(mapping.getSlugs());
+		if("".equals(url)) {
+			httpServletResponse.setStatus(404);
+		}else {
+			httpServletResponse.setHeader("Location", url);
+		    httpServletResponse.setStatus(302);
+		}
 	}
 	
 }
